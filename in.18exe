@@ -1,0 +1,53 @@
+# lammps in.file for lammps-learning
+
+# software: 		sublime_text_3
+# filename:			in.17exe
+# from:				WeChat/lammps_learn_serial/16
+# author:			ddw20191222(github)
+# date:				2020.07.02
+
+####################################################
+# Lammps Input file for building HEAs model		   #
+####################################################
+
+
+####define variable#################################
+variable			a equal 0.3		# define neighbor
+variable			lat equal 3.55	# define lattice constant
+variable			bx equal 5 		# define box length in x direction
+variable			by equal 5 		# define box length in y direction
+variable			bz equal 5 		# define box length in z direction
+variable  			f2 equal 0.216	# fraction of type 1 atoms to set to type 2
+variable  			f3 equal 0.219	# fraction of type 1 atoms to set to type 3
+variable  			f4 equal 0.366	# fraction of type 1 atoms to set to type 4
+variable  			f5 equal 0.5035	# fraction of type 1 atoms to set to type 5
+
+
+####Initialization##################################
+
+units				metal
+boundary			p p p 
+atom_style			atomic
+neighbor			${a} bin
+
+####define box and create atoms#####################
+
+lattice				fcc ${lat}
+region				box block 0 ${bx} 0 ${by} 0 ${bz}
+create_box			5 box
+create_atoms		1 box
+
+set 				type 1 type/fraction 2 ${f2} 666
+set 				type 1 type/fraction 3 ${f3} 888
+set 				type 1 type/fraction 4 ${f4} 999
+set 				type 1 type/fraction 5 ${f5} 555
+
+
+####define interation potential#####################
+pair_style			meam
+pair_coeff			* * library.mean Fe Cr Co Ni Mn CoNiCrFeMn.mean Fe Cr Co Ni Mn
+
+####print atomic infomation#########################
+dump 				1 all custom 10 beas.xyz id type x y z
+run 				0
+

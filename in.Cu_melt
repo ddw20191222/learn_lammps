@@ -1,0 +1,54 @@
+# Lammps in file for melt of Cu
+
+# software: 	sublimt_text3
+# date: 		2020.07.02
+# author:		ddw20191211 
+
+echo screen
+
+# 1. initiation
+
+units 			metal
+dimension		3
+boundary		p p p
+atom_style		atomic
+
+# 2. Atom definition --data
+
+lattice			fcc 3.61
+region			box block 0 4 0 4 0 4
+create_box		1 box
+create_atoms	1 box
+
+
+# 3. Setting
+#	3.1 force-field parameter
+
+pair_style		eam
+pair_coeff		* * /home/ddw/compute/lammps-7Aug19/potentials/Cu_u3.eam
+
+#	3.2 simulation parameter
+
+neighbor		0.5 bin
+neigh_modify	every 5 check yes
+
+# variable 		N equal abs(floor(x[100] + 100000))
+velocity		all create 100 123456789 dist gaussian
+
+
+#	3.3 fix command
+
+fix 			1 all nvt temp 100.0 50.0 1.0
+
+# 	3.4 dump
+
+thermo 			100
+dump 			1 all custom 100 Cu.lammpstrj id type x y z
+
+log 			Cu.log
+
+# 4. Run
+
+timestep		0.001
+run  			10000
+

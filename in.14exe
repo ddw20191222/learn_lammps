@@ -1,0 +1,53 @@
+# lammps in.file for lammps learning
+
+# software:		sublime_text_3
+# date:			2020.07.02
+# author: 		ddw20191222
+
+# 1. initialization
+# 	1.1 basic parameter
+
+units			metal
+dimension		3
+boundary		p p p
+atom_style		atomic
+
+# 2. data
+
+lattice			bcc 3.168
+region			box block 0 5 0 5 0 5
+create_box		1 box
+create_atoms	1 box
+
+# 3. Setting
+
+# 	3.1 force-field parameter
+
+pair_style		eam/alloy
+pair_coeff		* * /home/ddw/compute/lammps-7Aug19/potentials/W_zhou.eam.alloy W
+
+# 	3.2 define variable, compute and dump
+
+variable		i loop 5 
+variable		seed index 666 888 999 1010 555
+compute			1 all pe/atom
+
+thermo			100
+thermo_style	custom step temp pe etotal dt time
+dump			1 all custom 100 W.${i}.xyz id type x y z c_1
+
+# 	3.3	simulation environment
+
+velocity		all create 300 ${seed} mom yes rot yes dist gaussian
+fix 			1 all nvt temp 300 300 0.05
+timestep		0.001
+run 1000
+
+#	3.4 loop setting
+
+clear
+next			i
+next 			seed
+jump			in.14exe
+
+quit

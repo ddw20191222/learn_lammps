@@ -1,0 +1,33 @@
+# lammps in.file for lammps-learning
+
+# software: 	sublime_text_3
+# date:			2020.07.02
+# author: 		ddw20191222
+# filename:		in.24exe
+# from:			WeChat/lammps_learn_serial/24
+
+# 1. initialization
+
+units			metal
+boundary		s s p
+atom_style		atomic
+
+# 2. define box and create atoms
+
+lattice			fcc 3.52
+region			box block 0 16.0 0 10.0 0 2.828427
+create_box		3 box
+
+lattice 		fcc 3.52 orient x 1 0 0	orient y 0 1 1 orient z 0 -1 1 origin 0.5 0 0
+
+#lattice		fcc 3.52 orient	x 1 0 0 orient y 0 1 1 orient z 0 -1 1 &
+#		origin 0.5 0 0 
+create_atoms	1 box 
+
+
+# 3. 
+
+
+# 3.3 compute and dump
+
+dump 			1 all atom 100 24.shear

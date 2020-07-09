@@ -25,16 +25,16 @@ create_atoms	1 box
 
 # 3. Setting
 	# 3.1 force-field parameter
-pair_coeff		* * /home/ddw/compute/lammps-7Aug19/lib/W_zhou.eam.alloy W
+pair_coeff		* * /home/ddw/compute/lammps-7Aug19/potentials/W_zhou.eam.alloy W
 
 
 	# 3.2 simulation parameter
 # neighbor, neigh_modify, group
 
 	# 3.3 compute command
-compute 1 all pe/atoms
+compute 1 all pe
 
-thermo 10
+thermo 100
 thermo_style 	custom step temp pe etotal dt time
 dump 			1 all custom 100 W.xyz id type x y z
 
